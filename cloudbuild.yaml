@@ -1,0 +1,9 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '$_IMAGE_NAME', '.']
+
+substitutions:
+  _IMAGE_NAME: 'us-central1-docker.pkg.dev/$PROJECT_ID/my-app/app:$SHORT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # saves costs on free tier
