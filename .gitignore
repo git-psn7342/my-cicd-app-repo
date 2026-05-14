@@ -1,0 +1,3 @@
+# Create .gitignore
+node_modules/
+.env
