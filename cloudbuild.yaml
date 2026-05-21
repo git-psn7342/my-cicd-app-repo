@@ -1,40 +1,25 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '$_IMAGE_NAME', '.']
-
-substitutions:
-  _IMAGE_NAME: 'us-central1-docker.pkg.dev/$PROJECT_ID/my-app/app:$SHORT_SHA'
-
-options:
-  logging: CLOUD_LOGGING_ONLY  # saves costs on free tier
- # Stage 1: Install dependencies
   - name: 'node:18'
     id: 'install'
     entrypoint: 'npm'
     args: ['install']
 
-  # Stage 2: Run linting (parallel)
   - name: 'node:18'
     id: 'lint'
     entrypoint: 'npm'
     args: ['run', 'lint']
     waitFor: ['install']
 
-  # Stage 3: Run unit tests with coverage (parallel)
   - name: 'node:18'
     id: 'test'
     entrypoint: 'npm'
     args: ['test']
     waitFor: ['install']
 
-  # Stage 4: Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
     id: 'build'
-    args: ['build', '-t', '$_IMAGE_NAME', '.']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/my-app/app:$SHORT_SHA', '.']
     waitFor: ['lint', 'test']
 
 options:
   logging: CLOUD_LOGGING_ONLY
-
-substitutions:
-  _IMAGE_NAME: 'us-central1-docker.pkg.dev/$PROJECT_ID/my-app/app:$SHORT_SHA'
