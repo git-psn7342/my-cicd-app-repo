@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node app.js",
-    "test": "echo 'Tests passed' && exit 0"
+    "test": "jest --coverage",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0"
   }
 }
