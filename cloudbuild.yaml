@@ -18,8 +18,22 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     id: 'build'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/my-app/app:$SHORT_SHA', '.']
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/able-folio-490803-g2/my-app/app:$SHORT_SHA'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/able-folio-490803-g2/my-app/app:latest'
+      - '.'
     waitFor: ['lint', 'test']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'us-central1-docker.pkg.dev/able-folio-490803-g2/my-app/app'
+    waitFor: ['build']
 
 options:
   logging: CLOUD_LOGGING_ONLY
