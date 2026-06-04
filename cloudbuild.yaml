@@ -47,16 +47,9 @@ steps:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
       - 'CLOUDSDK_CONTAINER_CLUSTER=my-cicd-cluster'
     waitFor: ['push']
-
-
-      - 'CLOUDSDK_CONTAINER_CLUSTER=my-cicd-cluster'
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'notify'
     args: ['logging', 'write', 'deployment-audit-log', 'Deployment complete. Image: $SHORT_SHA', '--severity=NOTICE']
     waitFor: ['deploy-staging']
-
-
-
- 
 options:
   logging: CLOUD_LOGGING_ONLY
