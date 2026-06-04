@@ -34,6 +34,19 @@ steps:
       - '--all-tags'
       - 'us-central1-docker.pkg.dev/able-folio-490803-g2/my-app/app'
     waitFor: ['build']
+  - name: 'gcr.io/cloud-builders/kubectl'
+    id: 'deploy-staging'
+    args:
+      - 'set'
+      - 'image'
+      - 'deployment/my-cicd-app'
+      - 'my-cicd-app=us-central1-docker.pkg.dev/able-folio-490803-g2/my-app/app:$SHORT_SHA'
+      - '-n'
+      - 'staging'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=my-cicd-cluster'
+    waitFor: ['push']
 
 options:
   logging: CLOUD_LOGGING_ONLY

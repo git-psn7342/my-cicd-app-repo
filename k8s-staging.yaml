@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-cicd-app
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-cicd-app
+  template:
+    metadata:
+      labels:
+        app: my-cicd-app
+    spec:
+      containers:
+      - name: my-cicd-app
+        image: us-central1-docker.pkg.dev/able-folio-490803-g2/my-app/app:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-cicd-app-service
+  namespace: staging
+spec:
+  selector:
+    app: my-cicd-app
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer
