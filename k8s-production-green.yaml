@@ -1,0 +1,38 @@
+cat > k8s-production-green.yaml << 'EOF'
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-cicd-app-green
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-cicd-app
+      slot: green
+  template:
+    metadata:
+      labels:
+        app: my-cicd-app
+        slot: green
+    spec:
+      containers:
+      - name: my-cicd-app
+        image: us-central1-docker.pkg.dev/able-folio-490803-g2/my-app/app:latest
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+EOF
+
+kubectl apply -f k8s-production-green.yaml
