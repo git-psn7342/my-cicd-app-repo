@@ -50,17 +50,13 @@ steps:
 
 
       - 'CLOUDSDK_CONTAINER_CLUSTER=my-cicd-cluster'
-
-waitFor: ['push']
-
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'notify'
-    args:
-      - 'logging'
-      - 'write'
-      - 'deployment-audit-log'
-      - 'Deployment to staging complete. Image: $SHORT_SHA'
-      - '--severity=NOTICE'
+    args: ['logging', 'write', 'deployment-audit-log', 'Deployment complete. Image: $SHORT_SHA', '--severity=NOTICE']
     waitFor: ['deploy-staging']
+
+
+
+ 
 options:
   logging: CLOUD_LOGGING_ONLY
